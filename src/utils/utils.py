@@ -6,7 +6,8 @@ This modules implements various utility like
  - Various string functions
 '''
 
-class Log():
+def Log():
+    #(sys._getframe().f_back.f_code.co_name)
     pass
 
 
@@ -16,4 +17,9 @@ class StringHelperFunctions():
         pass
     pass
 
+def test_log():
+    Log()
+
+if __name__ == "__main__":
+    test_log()
 

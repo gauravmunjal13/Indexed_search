@@ -18,8 +18,9 @@ if __name__ == '__main__':
     # TODO Validate input
 
     # Checking if user entered a valid directory
-    if os.path.isdir(location):
-        # Passing the inputs to the indexing engine
-        pass
-    else:
+    if os.path.isdir(location) == False:
         print("The directory you gave does not exist. Exiting...")
+        exit(0)
+
+    # Passing the inputs to the indexing engine
+
