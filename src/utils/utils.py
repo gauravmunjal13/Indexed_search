@@ -1,6 +1,7 @@
 import sys
 import os
 import fnmatch
+import inspect
 
 '''
 This modules implements various utility like
@@ -8,25 +9,42 @@ This modules implements various utility like
  - Various string functions
 '''
 
-    #(sys._getframe().f_back.f_code.co_name)
+
 class Log:
-    pass
+
+    @staticmethod
+    def get_hdr():
+        hdr = ""
+        hdr += os.path.basename(inspect.stack()[2][1])
+        hdr += ":" + str(inspect.stack()[2][2])
+        hdr += "::" + str(inspect.stack()[2][3]) + "():"
+        return hdr
+
+    @staticmethod
+    def enter(arg=""):
+        print(Log.get_hdr() + " Enter " + arg)
+
+    @staticmethod
+    def exit(arg=""):
+        print(Log.get_hdr() + "Exit " + arg)
+
+    @staticmethod
+    def log(arg):
+        print(Log.get_hdr() + " " + arg)
 
 
 class StringHelperFunctions:
-    def stem(self):
+
+    @staticmethod
+    def stem():
         # TODO Implement porter stemmer or any other algorithm for stemming
         pass
     pass
 
-def test_log():
-    Log()
 
-if __name__ == "__main__":
-    test_log()
+def find_files(directory, pattern='*'):
+    """ to find files recursively in a directory """
 
-def find_files( directory, pattern='*'):
-    ''' to find files recursively in a directory '''
     if not os.path.exists(directory):
         raise ValueError("Directory not found {}".format(directory))
 
@@ -37,17 +55,6 @@ def find_files( directory, pattern='*'):
             if fnmatch.filter([full_path], pattern):
                 matches.append(os.path.join(root, filename))
     return matches
-
-
-def get_function_name():
-    return sys._getframe().f_back.f_code.co_name
-
-
-def test_utils_module():
-    print(get_function_name())
-
-if __name__ == "__main__":
-    test_utils_module()
 
 
 
