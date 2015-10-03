@@ -22,24 +22,15 @@ class Log:
 
     @staticmethod
     def enter(arg=""):
-        print(Log.get_hdr() + " Enter " + arg)
+        print(Log.get_hdr() + " [Enter] " + arg)
 
     @staticmethod
     def exit(arg=""):
-        print(Log.get_hdr() + "Exit " + arg)
+        print(Log.get_hdr() + " [Exit] " + arg)
 
     @staticmethod
     def log(arg):
         print(Log.get_hdr() + " " + arg)
-
-
-class StringHelperFunctions:
-
-    @staticmethod
-    def stem():
-        # TODO Implement porter stemmer or any other algorithm for stemming
-        pass
-    pass
 
 
 def find_files(directory, pattern='*'):
@@ -49,8 +40,8 @@ def find_files(directory, pattern='*'):
         raise ValueError("Directory not found {}".format(directory))
 
     matches = []
-    for root, dirnames, filenames in os.walk(directory):
-        for filename in filenames:
+    for root, dir_names, file_names in os.walk(directory):
+        for filename in file_names:
             full_path = os.path.join(root, filename)
             if fnmatch.filter([full_path], pattern):
                 matches.append(os.path.join(root, filename))

@@ -32,3 +32,4 @@ if __name__ == '__main__':
     indexer.index(location)
     result = indexer.search(query)
     utils.Log.log("Result := " + str(result))
+    indexer.save()
