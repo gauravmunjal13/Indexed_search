@@ -25,9 +25,11 @@ class IndexModule:
         utils.Log.log("delete the IndexModule class object")
         Storage.save(self.inverted_index, self.file_mapping)
 
-    def index(self, location):
+    def index(self, location, option=0):
         """
         this function does the indexing of the directory
+        :param location: the location to index / de-index
+        :param option: 0 -> for index; 1 -> for de-index
         """
         utils.Log.enter()
 
@@ -36,14 +38,22 @@ class IndexModule:
         files = utils.find_files(location)  # files is a list of all the files in the directory
         for file in files:
             inode_number = os.stat(file).st_ino
-            mod_time = os.stat(file).st_mtime
-            if inode_number not in self.file_mapping:
-                self.file_mapping[inode_number] = [file, mod_time]
-                self.index_file(file, inode_number)
-            else:
-                if self.file_mapping[inode_number][1] != mod_time:
-                    self.file_mapping[inode_number][1] = mod_time
+            # index the file
+            if option == 0:
+                mod_time = os.stat(file).st_mtime
+                if inode_number not in self.file_mapping:
+                    self.file_mapping[inode_number] = [file, mod_time]
                     self.index_file(file, inode_number)
+                else:
+                    if self.file_mapping[inode_number][1] != mod_time:
+                        self.file_mapping[inode_number][1] = mod_time
+                        self.index_file(file, inode_number)
+            # de-index the file
+            elif option == 1:
+                # check for the file in file_mapping
+                if inode_number in self.file_mapping:
+                    del self.file_mapping[inode_number]
+                    self.de_index_file(file, inode_number)
 
         utils.Log.exit()
 
@@ -87,6 +97,26 @@ class IndexModule:
             self.update_index(l_inverted_index)
             utils.Log.exit("Updated index : " + str(self.inverted_index))
 
+    def de_index_file(self, file, inumber):
+        """
+        de-index the file from the inverted index data structure
+        :param file: file to de-index
+        :param inumber: inode number of the file to be de-indexed
+        :return: None
+        """
+        utils.Log.enter("De-indexing file : " + file)
+        if not isinstance(file, str):
+            str(file)
+
+        with open(file, mode='r', encoding='utf-8') as file_descriptor:
+            file_contents = file_descriptor.read()
+            for word in file_contents.split():
+                # this if statement will avoid if the word repeats in the file
+                if inumber in self.inverted_index[word]:
+                    del self.inverted_index[word][inumber]
+
+        utils.Log.exit()
+
     def update_index(self, index):
         # key is the word here
         for key in index:
@@ -106,5 +136,6 @@ class IndexModule:
         if query in self.inverted_index:
             for file_inode_number in self.inverted_index[query]:
                 file_name = self.file_mapping[file_inode_number][0]
-                ret_var[file_name] = self.inverted_index[query][file_inode_number]  # value of ret_var[file_name] is list
+                # value of ret_var[file_name] is list
+                ret_var[file_name] = self.inverted_index[query][file_inode_number]
         return ret_var

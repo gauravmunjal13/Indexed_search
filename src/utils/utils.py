@@ -17,9 +17,9 @@ def log_header(func):
     :return: decorated function (header_to_log)
     """
     def header_to_log(*args, **kwargs):
-        print("" + os.path.basename(inspect.stack()[2][1]) +
-                              ":" + str(inspect.stack()[2][2]) +
-                              "::" + str(inspect.stack()[2][3]) + "():", end=' ')
+        print("" + os.path.basename(inspect.stack()[1][1]) +
+                              ":" + str(inspect.stack()[1][2]) +
+                              "::" + str(inspect.stack()[1][3]) + "():", end=' ')
         func(*args, **kwargs)
     return header_to_log
 

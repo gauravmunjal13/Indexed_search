@@ -12,7 +12,6 @@ def is_input_valid(query, location):
     if not os.path.isdir(location):
         utils.Log.log("The directory you gave does not exist. Exiting...")
         return False
-
     return True
 
 
