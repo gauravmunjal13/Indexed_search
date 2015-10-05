@@ -1,20 +1,12 @@
+import sys
 import os
 import src.indexingEngine.indexing_module as indexing_module
 import src.utils.utils as utils
+import datetime
 
 '''
 This is the main file for the Indexed Search project.
 '''
-
-
-def is_input_valid(query, location):
-    # Checking if user entered a valid directory
-    if not os.path.isdir(location):
-        utils.Log.log("The directory you gave does not exist. Exiting...")
-        return False
-
-    return True
-
 
 if __name__ == '__main__':
 
@@ -22,14 +14,35 @@ if __name__ == '__main__':
 
     # Take input from user
     query = input('Enter a string to search : ')
-    location = input('Enter a folder to search this string : ')
+    directory = input('Enter a folder to search this string : ')
 
-    if not is_input_valid(query, location):
-        exit(0)
+    # Check whether the given director is present or not
+    if not os.path.isdir(directory):
+        # utils.Log.log("The directory you gave does not exist. Exiting...")
+        sys.exit("The directory you gave does not exist. Exiting...")
 
-    # Passing the inputs to the indexing engine
+    # Create indexing module object
     indexer = indexing_module.IndexModule()
-    indexer.index(location)
-    result = indexer.search(query)
+
+    # Record start time
+    start_time = datetime.datetime.now()
+
+    # Index the directory
+    indexer.index(directory)
+
+    # Record end time
+    end_time = datetime.datetime.now()
+
+    # Print indexing time to the user
+    print("Indexing time := " + str(end_time - start_time))
+
+    # split query into words
+    words = query.split()
+
+    # TODO Merge the results
+    # for word in words:
+    result = indexer.search(words[0])
     utils.Log.log("Result := " + str(result))
+
+    # Save the indexing
     indexer.save()
