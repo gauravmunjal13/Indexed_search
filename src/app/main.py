@@ -30,6 +30,7 @@ if __name__ == '__main__':
     # Passing the inputs to the indexing engine
     indexer = indexing_module.IndexModule()
     indexer.index(location)
+
     result = indexer.search(query)
     utils.Log.log("Result := " + str(result))
     indexer.save()
