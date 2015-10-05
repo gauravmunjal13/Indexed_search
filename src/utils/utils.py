@@ -10,27 +10,36 @@ This modules implements various utility like
 '''
 
 
+def log_header(func):
+    """
+    decorator to add the log header to the function called
+    :param func: func to be decorated
+    :return: decorated function (header_to_log)
+    """
+    def header_to_log(*args, **kwargs):
+        print("" + os.path.basename(inspect.stack()[2][1]) +
+                              ":" + str(inspect.stack()[2][2]) +
+                              "::" + str(inspect.stack()[2][3]) + "():", end=' ')
+        func(*args, **kwargs)
+    return header_to_log
+
+
 class Log:
 
     @staticmethod
-    def get_hdr():
-        hdr = ""
-        hdr += os.path.basename(inspect.stack()[2][1])
-        hdr += ":" + str(inspect.stack()[2][2])
-        hdr += "::" + str(inspect.stack()[2][3]) + "():"
-        return hdr
-
-    @staticmethod
+    @log_header
     def enter(arg=""):
-        print(Log.get_hdr() + " [Enter] " + arg)
+        print(" [Enter] " + arg)
 
     @staticmethod
+    @log_header
     def exit(arg=""):
-        print(Log.get_hdr() + " [Exit] " + arg)
+        print(" [Exit] " + arg)
 
     @staticmethod
+    @log_header
     def log(arg):
-        print(Log.get_hdr() + " " + arg)
+        print(" " + arg)
 
 
 def find_files(directory, pattern='*'):
@@ -46,6 +55,3 @@ def find_files(directory, pattern='*'):
             if fnmatch.filter([full_path], pattern):
                 matches.append(os.path.join(root, filename))
     return matches
-
-
-

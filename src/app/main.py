@@ -23,7 +23,6 @@ if __name__ == '__main__':
 
     # Create indexing module object
     indexer = indexing_module.IndexModule()
-
     # Record start time
     start_time = datetime.datetime.now()
 
@@ -44,5 +43,5 @@ if __name__ == '__main__':
     result = indexer.search(words[0])
     utils.Log.log("Result := " + str(result))
 
-    # Save the indexing
+    # save the indexing
     indexer.save()
