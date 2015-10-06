@@ -27,6 +27,7 @@ def parse_command_line_args():
 
     return args
 
+
 def main():
 
     # call function to parse command line arguments
@@ -61,6 +62,7 @@ def main():
         indexer.save()
 
     elif args.search:
+
         # user wants to search a query
         print("Search : " + args.search)
 
@@ -70,8 +72,12 @@ def main():
         # record start time
         start_time = datetime.datetime.now()
 
-        # index the directory
-        indexer.search(args.search)
+        # split query into words
+        words = args.search.split()
+
+        # TODO Merge the results
+        # for word in words:
+        result = indexer.search(words[0])
 
         # record end time
         end_time = datetime.datetime.now()
@@ -79,15 +85,10 @@ def main():
         # print indexing time to the user
         print("Searching time := " + str(end_time - start_time))
 
-        # split query into words
-        words = args.search.split()
-
-        # TODO Merge the results
-        # for word in words:
-        result = indexer.search(words[0])
         utils.Log.log("Result := " + str(result))
 
     else:
+
         # TODO show usage here
         print("No option specified")
 
