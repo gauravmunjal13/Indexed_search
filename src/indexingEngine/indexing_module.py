@@ -19,9 +19,11 @@ class IndexModule:
         # Check is data is already present
         self.inverted_index, self.file_mapping = Storage.retrieve()
 
-    def save(self):
-        """ Name of function should be __del__. However in that case
-        exception occurs while opening the file to save data"""
+    def __del__(self):
+        """
+        this function is automatically called by python when the object of this class goes out of scope
+        we save the files we need in this function.
+        """
         utils.Log.log("delete the IndexModule class object")
         Storage.save(self.inverted_index, self.file_mapping)
 

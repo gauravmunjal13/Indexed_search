@@ -59,8 +59,6 @@ def main():
         # print indexing time to the user
         print("Indexing time := " + str(end_time - start_time))
 
-        indexer.save()
-
     elif args.search:
 
         # user wants to search a query
