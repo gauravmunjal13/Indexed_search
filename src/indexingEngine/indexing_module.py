@@ -141,3 +141,11 @@ class IndexModule:
                 # value of ret_var[file_name] is list
                 ret_var[file_name] = self.inverted_index[query][file_inode_number]
         return ret_var
+
+    @staticmethod
+    def clean():
+        # TODO need to be recorded
+        utils.Log.enter()
+        Storage.clean()
+        utils.Log.exit()
+

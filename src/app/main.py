@@ -22,6 +22,12 @@ def parse_command_line_args():
     group.add_argument("-i", "--index", help="location to index")
     group.add_argument("-s", "--search", help="query to search")
 
+    # add input optional command line arguments for clean and de-indexing
+    """ clean is a flag. This means that, if the option is specified,
+    assign the value True to clean. Not specifying it implies False."""
+    group.add_argument("--clean", help="clean indexing", action="store_true")
+    group.add_argument("-d", "--deindex", help="location to de-index")
+
     # parse the arguments
     args = parser.parse_args()
 
@@ -34,7 +40,7 @@ def main():
     args = parse_command_line_args()
 
     # take action depending upon user input
-    if args.index:
+    if args.index or args.deindex:
 
         # user want to index (currently support for adding index only)
         print("Index : " + args.index)
@@ -50,14 +56,24 @@ def main():
         # record start time
         start_time = datetime.datetime.now()
 
-        # index the directory
-        indexer.index(args.index)
+        if args.index:
+            # index the directory
+            indexer.index(args.index)
+        else:
+            # de-index the directory
+            indexer.index(args.deindex,1)
 
         # record end time
         end_time = datetime.datetime.now()
 
         # print indexing time to the user
         print("Indexing time := " + str(end_time - start_time))
+
+    elif args.clean:
+        # get indexing module object
+        utils.Log.log("cleaning the indexed data")
+        # indexer = indexing_module.IndexModule()
+        indexing_module.IndexModule.clean()
 
     elif args.search:
 

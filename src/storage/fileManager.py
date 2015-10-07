@@ -43,5 +43,12 @@ class FileManager:
                 file_mapping = pickle.load(f)
         except FileNotFoundError:
             utils.Log.log("fmap.pickle file not created yet")
+        utils.Log.exit()
         return inverted_index, file_mapping
-    utils.Log.exit()
+
+    @staticmethod
+    def clean():
+        utils.Log.enter()
+        os.remove("fmap.pickle")
+        os.remove("iids.pickle")
+        utils.Log.exit()
